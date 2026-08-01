@@ -23,6 +23,8 @@ Upstream candidate: fixture and regression-test commit.
 
 Estimated usage: **2–3%**
 
+Status: **Complete (2026-08-01).** The collector is intentionally not wired into popup or storage code yet.
+
 - Introduce a standalone collector that reads current DOM state when invoked.
 - Represent each control as a separate record so repeated names are preserved.
 - Capture input type, value, checked state, selected options, IDs, names, labels, relevant attributes, and structural hints.
@@ -37,6 +39,8 @@ Upstream candidate: collector module and unit tests.
 
 Estimated usage: **2–3%**
 
+Status: **Complete (2026-08-01).** Replay uses direct DOM property assignment; framework-aware setters and events remain Phase 3 work.
+
 - Match saved records to current controls using multiple stable signals rather than name alone.
 - Restore standard inputs, textareas, selects, radios, and checkboxes.
 - Report matched, unmatched, and ambiguous records.
@@ -49,6 +53,8 @@ Upstream candidate: matcher/replay module and tests.
 ## Phase 3: Framework-aware events and dynamic forms
 
 Estimated usage: **3–5%**
+
+Status: **Complete (2026-08-01).** Multi-pass restoration is synchronous and bounded; asynchronous and multi-step workflows remain later compatibility work.
 
 - Apply values through native property setters where necessary.
 - Dispatch bubbling `input` and `change` events so controlled forms react.
@@ -63,6 +69,8 @@ Upstream candidate: event-aware restoration as its own focused PR. If this phase
 
 Estimated usage: **2–3%**
 
+Status: **Complete (2026-08-01).** Manual Chrome verification confirmed capture from a filled tab that predated extension installation.
+
 - Make Save and Restore inject their required code into the active tab when clicked.
 - Remove reliance on content-script globals already being present.
 - Verify the defining scenario: the tab is opened and filled before extension installation, then captured without refreshing.
@@ -75,6 +83,8 @@ Upstream candidate: on-demand injection and error-handling commit using FormVaul
 ## Phase 5: Storage identity and checkpoint integration
 
 Estimated usage: **2–3%**
+
+Status: **Complete (2026-08-01).** Checkpoints use versioned local storage keyed by normalized origin and pathname, with no automatic domain fallback.
 
 - Store the versioned snapshot schema through extension storage.
 - Normalize page identity so harmless fragments and query changes do not unnecessarily hide a checkpoint.
@@ -89,6 +99,10 @@ Upstream candidate: versioned storage and URL-normalization commits, if they pre
 
 Estimated usage: **2–4%**
 
+Status: **Complete (2026-08-01).** Product naming, metadata, notifications, popup actions, and checkpoint management now use the new versioned checkpoint model.
+
+Post-phase versioning checkpoint: **Complete (2026-08-01).** Repeated saves can create new timestamped versions or explicitly replace the latest; restore defaults to the newest version; the management page groups all versions by form page; version-1 records migrate automatically.
+
 - Rename the primary actions to Save Checkpoint and Restore Checkpoint.
 - Update notifications, manifest metadata, package metadata, and remaining user-facing FormVault branding.
 - Show useful save/restore results, including partial failures.
@@ -101,6 +115,10 @@ Upstream candidate: none; keep this phase fork-specific.
 ## Phase 7: Compatibility expansion and release readiness
 
 Estimated usage: **3–6%**, divided further if needed
+
+Phase 7A status: **Complete (2026-08-01).** Removed inherited always-on content scripts, broad host access, and the sensitive `tabs` permission; replaced remote popup styling; documented privacy and the current compatibility matrix.
+
+Phase 7B status: **Complete (2026-08-01).** Replaced the inherited broken ZIP task with a tested runtime allowlist, repaired lint coverage, removed an unused runtime dependency, and drafted the Web Store listing, privacy disclosures, and remaining asset checklist.
 
 - Evaluate contenteditable controls, open shadow DOM, frames, file inputs, custom widgets, and multi-step forms individually.
 - Add only capabilities that can be made safe and testable; document remaining limits.

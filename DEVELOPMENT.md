@@ -20,7 +20,7 @@ The extension does not need a build step for local development. Chrome can load 
 4. Pin the extension from Chrome's Extensions menu if you want its toolbar button to remain visible.
 5. Open a non-sensitive test page, enter sample form values, and exercise the popup actions.
 
-After changing the source, return to `chrome://extensions` and click the extension's **Reload** button. Refresh any open test tabs so Chrome injects the updated content scripts. Popup changes appear when the popup is reopened, but reloading the extension first is the safest routine.
+After changing the source, return to `chrome://extensions` and click the extension's **Reload** button. Form Checkpoint injects its capture engine only when an action is clicked, so existing test tabs do not normally need to be refreshed. Popup changes appear when the popup is reopened.
 
 To use the included test fixture, serve the repository over HTTP from its root:
 
@@ -45,3 +45,21 @@ Before preparing a Chrome Web Store upload:
 3. Reopen or clear the form and restore the checkpoint.
 4. Confirm the restored values and checked or selected states are correct.
 5. Confirm that no real form answers, personal information, credentials, production snapshots, or other sensitive data are included in the repository or package.
+
+Review [COMPATIBILITY.md](COMPATIBILITY.md) for the supported control matrix and [PRIVACY.md](PRIVACY.md) for the permission and data-handling model before release.
+
+## Build the release package
+
+Create a tested Chrome Web Store ZIP with:
+
+```sh
+npm run package
+```
+
+The archive is written to `dist/form-checkpoint-<version>.zip`. Its contents come from an explicit allowlist in `gulpfile.js`; tests, local planning files, dependencies, fixtures, and inherited FormVault runtime files are excluded. Inspect the archive before uploading:
+
+```sh
+unzip -l dist/form-checkpoint-0.9.0.zip
+```
+
+See [STORE-LISTING.md](STORE-LISTING.md) for draft listing copy and remaining dashboard assets.

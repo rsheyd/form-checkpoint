@@ -6,9 +6,11 @@ The defining goal is explicit whole-form capture: after installing the extension
 
 ## Project status
 
-Form Checkpoint is under development and does not yet reliably provide the behavior described above. It currently retains much of FormVault's original interface and implementation while its capture and restore engine is being improved.
+Form Checkpoint is under active development. Its core explicit save-and-restore workflow is implemented; broader compatibility testing and Chrome Web Store release preparation remain.
 
 Development setup and local testing instructions are in [DEVELOPMENT.md](DEVELOPMENT.md).
+
+See [COMPATIBILITY.md](COMPATIBILITY.md) for current form support and known limits, and [PRIVACY.md](PRIVACY.md) for local data handling and permission rationale.
 
 ## Lineage and license
 

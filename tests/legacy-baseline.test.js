@@ -67,14 +67,10 @@ test('baseline limitation: the parser can only retain controls supplied by seria
   assert.equal(result.outsideForm, undefined);
 });
 
-test('baseline limitation: popup save injection references globals not included in the injected function', () => {
+test('popup routes save and restore through the on-demand injection helper', () => {
   const popupSource = fs.readFileSync(path.join(projectRoot, 'popup/popup.js'), 'utf8');
 
-  assert.match(popupSource, /func:\s*saveTemplates/);
-  assert.match(popupSource, /function saveTemplates\(\)[\s\S]*new FormParser/);
-  assert.match(popupSource, /function saveTemplates\(\)[\s\S]*new URLParser/);
-  assert.doesNotMatch(
-    popupSource,
-    /files:\s*\[[^\]]*form-parser\.js[^\]]*\]/
-  );
+  assert.match(popupSource, /CheckpointActions\.captureTab\(chrome, tab\.id\)/);
+  assert.match(popupSource, /CheckpointActions\.restoreTab\(chrome, tab\.id, savedVersion\.snapshot\)/);
+  assert.doesNotMatch(popupSource, /func:\s*saveTemplates/);
 });

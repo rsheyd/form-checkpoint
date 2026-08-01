@@ -1,42 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <link rel="stylesheet" type="text/css" href="templates.css">
-  <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="../css/bootstrap-icons.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-</head>
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <h1 class = "title">Form Vault Templates</h4>
-        <input id ="searchTemplate" type="text" class="form-control" placeholder="Search for templates...">
-        <div class="table-responsive">
-          <table id="mytable" class="table table-bordred table-striped sortable">
-           <thead>
-             <th><input type="checkbox" id="checkall" /></th>
-             <th data-sortable="true">Domain</th>
-             <th>URL</th>
-             <th>Edit</th>
-             <th>Delete</th>
-           </thead>
-           <tbody>
-          </tbody>
+  <head>
+    <meta charset="utf-8">
+    <title>Saved Forms</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="templates.css">
+  </head>
+  <body>
+    <main class="container">
+      <h1>Saved Forms</h1>
+      <p>Each form page can have multiple saved versions. Restore or delete any version below.</p>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div id="checkpoint-groups"></div>
+
+      <section id="legacy-section" hidden>
+        <h2>Legacy FormVault templates</h2>
+        <p>These records use FormVault’s older storage format. They are shown separately and are not used by Restore Saved Form.</p>
+        <table class="table table-bordered">
+          <thead><tr><th>Page</th><th>Actions</th></tr></thead>
+          <tbody id="legacy-rows"></tbody>
         </table>
-      </div>
-      <p data-placement="top" title="Delete"><button id="delete-selected" class="btn btn-danger btn-s" data-toggle="modal" data-target="#myModal"> Delete Selected <span class="glyphicon glyphicon-trash"></span></button></p>
-    </div>
-  </div>
-</body>
-  <script src="../js/jquery.min.js" type="text/javascript"></script>
-  <script src="../js/slim.min.js"></script>
-  <script src="../js/popper.min.js"></script>
-  <script src="../js/bootstrap.min.js"></script>
-  <script src="../content_scripts/form-parser.js"></script>
-  <script src="../content_scripts/data-stack.js"></script>
-  <script src="../content_scripts/template-service.js"></script>
-  <script src="../content_scripts/main.js"></script>
-  <script src="../content_scripts/url-parser.js"></script>
-  <script src="template-table.js"></script>
+      </section>
+    </main>
+    <script src="../content_scripts/checkpoint-storage.js"></script>
+    <script src="../popup/checkpoint-actions.js"></script>
+    <script src="template-table.js"></script>
+  </body>
 </html>

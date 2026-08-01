@@ -1,52 +1,91 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/button.css">
-      <title>Form Vault Extension Popup</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+      <title>Form Checkpoint</title>
     <style>
       body {
-        width: 170px;
-        height: 380px;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 18px;
+        width: 280px;
       }
 
       button {
-        overflow:hidden;
-        width: 80%;
-        margin : 5px;
-        display: inline-block;
-        padding: 15px 32px;
+        display: block;
+        margin: 10px 0;
+        padding: 11px 14px;
+        width: 100%;
       }
 
       .btn {
-        margin-bottom: 1px;
+        font-size: 15px;
       }
+
       h2 {
         font-family: "Times New Roman", Times, serif;
-        margin-top : 10px;
+        font-size: 28px;
+        margin: 0 0 10px;
       }
+
       img {
-        width:26%;
-        height:13%;
+        height: 64px;
+        width: 64px;
+      }
+
+      .description {
+        color: #555;
+        font-size: 13px;
+        line-height: 1.4;
+        margin: 10px 0 14px;
+      }
+
+      .divider {
+        border-top: 2px dotted #999;
+        margin-bottom: 14px;
+      }
+
+      #status {
+        color: #444;
+        font-size: 13px;
+        line-height: 1.35;
+        margin: 10px 0 0;
+        min-height: 0;
+      }
+
+      #save-choice {
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-top: 12px;
+        padding: 10px;
+        text-align: left;
+      }
+
+      #save-choice button {
+        margin: 7px 0 0;
       }
     </style>
   </head>
   <body class = "text-center">
-    <h2> Form Vault </h2>
-    <img src="icon.png" alt="Form Vault">
-    <div style="border-top: dotted gray;margin-top: 10px;"</div>
-    <button type = "button" class="btn btn-primary btn-xs center-block" id="undo"> Undo </button>
-    <button type = "button" class="btn btn-success btn-xs" id="save-template"> Save Template </button>
-    <button type = "button" class="btn btn-warning btn-xs" id="restore-template"> Restore Template </button>
-    <button type = "button" class="btn btn-info btn-xs" id="edit-templates"> Edit Templates </button>
-    <button type = "button" class="btn btn-danger btn-xs" id="clear" style = "float:bottom; margin-bottom: : -10%;"> Clear History </button>
+    <h2>Form Checkpoint</h2>
+    <img src="../artwork/icons/icon-128.png" alt="Form Checkpoint">
+    <p class="description">Save the values on this page and restore them later.</p>
+    <div class="divider"></div>
+    <button type="button" class="btn btn-success btn-xs" id="save-template">Save Form</button>
+    <button type="button" class="btn btn-warning btn-xs" id="restore-template">Restore Saved Form</button>
+    <button type="button" class="btn btn-info btn-xs" id="edit-templates">Saved Forms</button>
+    <button type="button" class="btn btn-danger btn-xs" id="clear">Clear Saved Data</button>
+    <section id="save-choice" hidden>
+      <p id="save-choice-message"></p>
+      <button type="button" class="btn btn-success btn-xs" id="save-new-version">Save New Version</button>
+      <button type="button" class="btn btn-warning btn-xs" id="replace-latest">Replace Latest</button>
+      <button type="button" class="btn btn-default btn-xs" id="cancel-save">Cancel</button>
+    </section>
+    <p id="status" role="status" aria-live="polite"></p>
     <script src="../js/jquery.min.js"></script>
+    <script src="../content_scripts/checkpoint-storage.js"></script>
+    <script src="checkpoint-actions.js"></script>
     <script src="popup.js"></script>
-    <script src="../content_scripts/data-stack.js"></script>
-    <script src="../content_scripts/template-service.js"></script>
-    <script src="../content_scripts/url-parser.js"></script>
-    <script src="../content_scripts/form-parser.js"></script>
-    <script src="../content_scripts/main.js"></script>
   </body>
 </html>
-

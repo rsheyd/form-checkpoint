@@ -4,7 +4,11 @@
   },
   "env": {
     "browser": true,
-    "jquery": true
+    "jquery": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
   },
   "rules": {
     "brace-style": [2, "1tbs"],

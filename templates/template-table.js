@@ -1,156 +1,187 @@
-$(document).ready(function () {
-  document.getElementById('searchTemplate').addEventListener('keyup', filterTable);
-  $('#mytable #checkall').click(function () {
-    if ($('#mytable #checkall').is(':checked')) {
-      $('#mytable input[type=checkbox]').each(function () {
-        $(this).prop('checked', true);
-      });
+/* global CheckpointActions, CheckpointStorage */
 
-    } else {
-      $('#mytable input[type=checkbox]').each(function () {
-        $(this).prop('checked', false);
-      });
-    }
-  });
-  $('#delete-selected').click(function () {
-    if ($('input:checkbox:checked').length > 0) {
-      if (confirm('Are you sure you want to delete these templates?')) {
-        $('input:checkbox:checked').each(function () {
-          var url = $(this).parent().parent().children().eq(2).text();
-          var row_id = $(this).parent().parent()[0].rowIndex;
-          document.getElementById('mytable').deleteRow(row_id);
-          chrome.storage.sync.remove(url + '-template');
-        });
-      }
-    }
-    $(this).blur();
-  });
-  $('[data-toggle=tooltip]').tooltip();
-  //Populate table
-  var templateService = new TemplateService();
-  templateService.getTemplateUrls(function(allKeys) {
-    var row_id = 0;
-    if(allKeys == undefined) {
-      return;
-    }
-    allKeys.forEach(function (key) {
-      var urlParser = new URLParser(key);
-      var url = urlParser.removeTemplate();
-      var urlHostname = urlParser.extractHostname();
-      var row = document.createElement('TR');
-      var cell0 = row.insertCell(0);
-      var cell1 = row.insertCell(1);
-      var cell2 = row.insertCell(2);
-      var cell3 = row.insertCell(3);  
-      var cell4 = row.insertCell(4);
-      cell0.innerHTML = '<input type="checkbox" class="checkthis" />';
-      cell1.innerHTML = urlHostname;
-      cell2.innerHTML = url;
-      cell3.innerHTML = '<td><pdata-placement="top"><button id="edit' + row_id + '" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></button></p></td>';
-      cell4.innerHTML = '<p data-placement="top" title="Delete"><button id="delete' + row_id + '" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-trash"></span></button></p>';
-      $('#mytable > tbody:last-child').append(row);
-      document.getElementById('edit' + row_id).addEventListener('click', async function (e) {
-        e.stopPropagation();
-        await editTemplate(url);
-        $(this).blur();
-      }, false);
-      document.getElementById('delete' + row_id).addEventListener('click', async function (e) {
-        e.stopPropagation();
-        await deleteTemplate(url, row); $(this).blur();
-      }, false);
-      jQuery(row).attr('id', row_id);
-      row_id++;
-    });
-  });
-});
+function setStatus(message) {
+  document.getElementById('status').textContent = message;
+}
 
-// Navigate to template url by creating a new tab, and executing the restore-template script to populate form data
-async function editTemplate(url) {
-  var urlParser = new URLParser(url);
-  urlParser.removeTemplate();
-  await chrome.tabs.create({'url': urlParser.url, selected: true, active: true}, async function (newTab) {
-    if (!newTab.url) await onTabUrlUpdated(newTab.id);
-    var obj = {};
-    obj['isFromPopup'] = false;
-    await chrome.runtime.sendMessage({type: "store-local", value: obj}, function(response) {
-      chrome.scripting.executeScript(
-      {
-        target: {tabId: newTab.id},
-        files: [
-          "content_scripts/url-parser.js",
-          "content_scripts/form-parser.js",
-          "content_scripts/data-stack.js",
-          "content_scripts/template-service.js",
-          "js/jquery.min.js",
-          "content_scripts/main.js",
-          'templates/restore-template.js'
-        ],
-      },
-      function() {
-        console.log("Last error:", chrome.runtime.lastError);
-      });
-    });
+function createButton(label, className, handler) {
+  var button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'btn btn-xs ' + className;
+  button.textContent = label;
+  button.addEventListener('click', handler);
+  return button;
+}
+
+function createTab(url) {
+  return new Promise(function (resolve) {
+    chrome.tabs.create({ url: url, active: true }, resolve);
   });
 }
 
-// Delete template from chrome storage and table
-async function deleteTemplate(url, row) {
-  if (confirm('Are you sure you want to delete this template?') == false) {
-    return;
-  } else {
-    var i = row.rowIndex;
-    document.getElementById('mytable').deleteRow(i);
-    await chrome.storage.sync.remove(url + '-template');
-  }
+function sitePattern(url) {
+  var parsed = new URL(url);
+  return parsed.protocol === 'file:' ? 'file:///*' : parsed.origin + '/*';
 }
 
-function filterTable() {
-  // Declare variables
-  var input, filter, table, tr, td, i;
-  input = document.getElementById('searchTemplate');
-  filter = input.value.toUpperCase();
-  table = document.getElementById('mytable');
-  tr = table.getElementsByTagName('tr');
-
-  var hiddenRows = $('[id^="hidden"]');
-  for (i = 0; i < hiddenRows.length;i++){
-    hiddenRows[i].style.display = 'none';
-  }
-
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    var td1 = tr[i].getElementsByTagName('td')[1];
-    var td2 = tr[i].getElementsByTagName('td')[2];
-    if (td1 || td2) {
-      if (td1.innerHTML.toUpperCase().indexOf(filter) > -1 || td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = '';
+function ensureSiteAccess(url) {
+  var request = { origins: [sitePattern(url)] };
+  return new Promise(function (resolve, reject) {
+    chrome.permissions.request(request, function (granted) {
+      if (granted) {
+        resolve();
       } else {
-        tr[i].style.display = 'none';
+        reject(new Error('Site access is required to restore this saved version.'));
       }
-    }
-  }
-}
-
-function retrieveTemplateData(url) {
-  var data = [];
-  chrome.storage.sync.get(url + '-template', function (items) {
-    var item_len = Object.keys(items).length;
-    if (items != undefined && item_len > 0) {
-      data = items[url + '-template'];
-    }
+    });
   });
-  return data;
 }
 
-function onTabUrlUpdated(tabId) {
-  return new Promise((resolve, reject) => {
-    const onUpdated = (id, info) => id === tabId && info.url && done(true);
-    const onRemoved = id => id === tabId && done(false);
-    chrome.tabs.onUpdated.addListener(onUpdated);
-    chrome.tabs.onRemoved.addListener(onRemoved);
-    function done(ok) {
+function waitForTab(tabId) {
+  return new Promise(function (resolve, reject) {
+    function done(error) {
       chrome.tabs.onUpdated.removeListener(onUpdated);
       chrome.tabs.onRemoved.removeListener(onRemoved);
-      (ok ? resolve : reject)();
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
     }
-})};
+    function onUpdated(id, info) {
+      if (id === tabId && info.status === 'complete') {
+        done();
+      }
+    }
+    function onRemoved(id) {
+      if (id === tabId) {
+        done(new Error('The tab was closed before the checkpoint could be restored.'));
+      }
+    }
+    chrome.tabs.onUpdated.addListener(onUpdated);
+    chrome.tabs.onRemoved.addListener(onRemoved);
+    chrome.tabs.get(tabId, function (tab) {
+      if (!chrome.runtime.lastError && tab.status === 'complete') {
+        done();
+      }
+    });
+  });
+}
+
+async function openAndRestore(record) {
+  try {
+    await ensureSiteAccess(record.snapshot.page.url);
+    setStatus('Opening ' + record.pageIdentity + '…');
+    var tab = await createTab(record.snapshot.page.url);
+    await waitForTab(tab.id);
+    var result = await CheckpointActions.restoreTab(chrome, tab.id, record.snapshot);
+    var unresolved = result.unmatched.length + result.ambiguous.length;
+    var message = 'Restored ' + result.restored.length + ' fields.';
+    if (unresolved > 0) {
+      message += ' ' + unresolved + ' fields could not be matched safely.';
+    }
+    setStatus(message);
+  } catch (error) {
+    setStatus(error.message || String(error));
+  }
+}
+
+function renderVersion(record, tableBody, group) {
+  var row = tableBody.insertRow();
+  row.insertCell().textContent = new Date(record.savedAt).toLocaleString();
+  row.insertCell().textContent = String(record.snapshot.controls.length);
+  var actions = row.insertCell();
+  actions.appendChild(createButton('Open & restore', 'btn-primary', function () {
+    openAndRestore(record);
+  }));
+  actions.appendChild(document.createTextNode(' '));
+  actions.appendChild(createButton('Delete', 'btn-danger', async function () {
+    // Destructive deletion requires an explicit browser-native confirmation.
+    // eslint-disable-next-line no-alert
+    if (!confirm('Delete this saved version?')) {
+      return;
+    }
+    await CheckpointStorage.removeVersion(chrome.storage.local, record);
+    row.remove();
+    if (tableBody.rows.length === 0) {
+      group.remove();
+    }
+    setStatus('Saved version deleted.');
+  }));
+}
+
+function renderCheckpointGroups(records) {
+  var groups = {};
+  records.forEach(function (record) {
+    if (!groups[record.pageIdentity]) {
+      groups[record.pageIdentity] = [];
+    }
+    groups[record.pageIdentity].push(record);
+  });
+
+  Object.keys(groups).sort().forEach(function (pageIdentity) {
+    var group = document.createElement('section');
+    group.className = 'saved-form-group';
+    var heading = document.createElement('h2');
+    heading.textContent = pageIdentity;
+    group.appendChild(heading);
+
+    var table = document.createElement('table');
+    table.className = 'table table-bordered table-striped';
+    table.innerHTML = '<thead><tr><th>Saved</th><th>Fields</th><th>Actions</th></tr></thead>';
+    var tableBody = document.createElement('tbody');
+    table.appendChild(tableBody);
+    group.appendChild(table);
+    document.getElementById('checkpoint-groups').appendChild(group);
+
+    groups[pageIdentity].forEach(function (record) {
+      renderVersion(record, tableBody, group);
+    });
+  });
+}
+
+function getLegacyTemplates() {
+  return new Promise(function (resolve) {
+    chrome.storage.sync.get(null, function (items) {
+      resolve(Object.keys(items || {}).filter(function (key) {
+        return key.indexOf('-domain') === -1 && key.slice(-9) === '-template';
+      }));
+    });
+  });
+}
+
+function renderLegacyTemplate(key) {
+  var url = key.slice(0, -9);
+  var row = document.getElementById('legacy-rows').insertRow();
+  row.insertCell().textContent = url;
+  var actions = row.insertCell();
+  actions.appendChild(createButton('Open page', 'btn-default', function () {
+    chrome.tabs.create({ url: url, active: true });
+  }));
+  actions.appendChild(document.createTextNode(' '));
+  actions.appendChild(createButton('Delete', 'btn-danger', function () {
+    // Destructive deletion requires an explicit browser-native confirmation.
+    // eslint-disable-next-line no-alert
+    if (!confirm('Delete this legacy template?')) {
+      return;
+    }
+    chrome.storage.sync.remove(key, function () {
+      row.remove();
+      setStatus('Legacy template deleted.');
+    });
+  }));
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+  var records = await CheckpointStorage.list(chrome.storage.local);
+  renderCheckpointGroups(records);
+  if (records.length === 0) {
+    setStatus('No saved forms yet.');
+  }
+
+  var legacyKeys = await getLegacyTemplates();
+  if (legacyKeys.length > 0) {
+    document.getElementById('legacy-section').hidden = false;
+    legacyKeys.forEach(renderLegacyTemplate);
+  }
+});

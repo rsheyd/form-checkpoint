@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>FormVault compatibility fixture</title>
+    <title>Form Checkpoint compatibility fixture</title>
   </head>
   <body>
     <h1>Non-sensitive form compatibility fixture</h1>
@@ -52,8 +52,55 @@
     <label for="outside-form">Field outside the form</label>
     <textarea id="outside-form" name="outsideForm">Outside sample</textarea>
 
+    <section aria-labelledby="modern-compatibility-heading">
+      <h2 id="modern-compatibility-heading">Modern form compatibility</h2>
+
+      <label for="controlled-style">Event-observed field</label>
+      <input id="controlled-style" name="controlledStyle" value="Observed sample">
+      <output id="controlled-style-events" for="controlled-style">No events observed</output>
+
+      <label>
+        <input id="show-conditional" name="showConditional" type="checkbox" value="yes">
+        Show conditional field
+      </label>
+      <div id="conditional-container"></div>
+    </section>
+
     <p id="manual-install-test">
       To test the defining install scenario, open this page and edit its values before loading the unpacked extension. Save without refreshing this tab.
     </p>
+
+    <script>
+      (function () {
+        var observed = document.getElementById('controlled-style');
+        var eventOutput = document.getElementById('controlled-style-events');
+        var observedEvents = [];
+
+        ['input', 'change'].forEach(function (type) {
+          observed.addEventListener(type, function () {
+            observedEvents.push(type);
+            eventOutput.textContent = observedEvents.join(', ') + ': ' + observed.value;
+          });
+        });
+
+        var toggle = document.getElementById('show-conditional');
+        var container = document.getElementById('conditional-container');
+        toggle.addEventListener('change', function () {
+          if (toggle.checked && !document.getElementById('conditional-details')) {
+            var label = document.createElement('label');
+            label.htmlFor = 'conditional-details';
+            label.textContent = 'Conditional details';
+            var input = document.createElement('input');
+            input.id = 'conditional-details';
+            input.name = 'conditionalDetails';
+            input.value = 'Conditional sample';
+            container.appendChild(label);
+            container.appendChild(input);
+          } else if (!toggle.checked) {
+            container.textContent = '';
+          }
+        });
+      }());
+    </script>
   </body>
 </html>
