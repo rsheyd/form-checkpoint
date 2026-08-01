@@ -1,5 +1,15 @@
 # Development
 
+## Automated baseline tests
+
+Run the dependency-free characterization suite with:
+
+```sh
+npm test
+```
+
+These tests record the inherited FormVault parser's current behavior, including known limitations that later implementation phases are expected to replace. See `PROJECT-STATUS.md` for the current baseline and phased plan.
+
 ## Test local changes in Chrome
 
 The extension does not need a build step for local development. Chrome can load the repository directly:
