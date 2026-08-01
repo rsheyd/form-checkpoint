@@ -1,12 +1,19 @@
-# FormVault
-FormVault gives users the ability to save form templates and recover lost form data from any webpage.
+# Form Checkpoint
 
-Current features: 
-* The ‘Undo’ button will restore autosaved data for a particular site. This data is stored locally on your chrome browser.
-* The ‘Save Template’ button will create a template of current site’s form data. As long as the user has ‘sync’ enabled on their chrome browser, this data will persist offline and across different devices. Note that this button will overwrite previously saved templates.
-* The ‘Restore Template’ button will retrieve the template saved to the site’s URL and fill the template data into the appropriate fields on the form. 
-* The ‘Edit Templates’ button will open a new webpage with a table displaying all the user’s currently saved templates. Users can edit and delete templates from this page.
-* The ‘Clear History’ button will clear all history - templates and auto-saved data. This data cannot be recovered.
-* Works for all text elements, select drop-downs, radio buttons, and checkboxes.
+Form Checkpoint is a Chrome extension for saving the current state of a filled-in form and restoring it later.
 
-Published to the Chrome Web Store at: https://chrome.google.com/webstore/detail/form-vault/lmhpmojffnpndeejifmkicggnilnlfem
+The defining goal is explicit whole-form capture: after installing the extension, a user should be able to save values that are already present in an open tab—even if that tab was opened and filled out before the extension was installed—and later restore that checkpoint to the same form.
+
+## Project status
+
+Form Checkpoint is under development and does not yet reliably provide the behavior described above. It currently retains much of FormVault's original interface and implementation while its capture and restore engine is being improved.
+
+Development setup and local testing instructions are in [DEVELOPMENT.md](DEVELOPMENT.md).
+
+## Lineage and license
+
+Form Checkpoint is an MIT-licensed fork of [FormVault](https://github.com/drewsb/FormVault). FormVault provides the original template-saving, restoration, autosave, and template-management functionality on which this project is based.
+
+Generally useful compatibility and parser improvements are kept separate from Form Checkpoint-specific branding and product changes where practical, so they can be proposed upstream.
+
+See [LICENSE](LICENSE) for license details.
