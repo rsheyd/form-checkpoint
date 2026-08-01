@@ -46,7 +46,7 @@ Before preparing a Chrome Web Store upload:
 4. Confirm the restored values and checked or selected states are correct.
 5. Confirm that no real form answers, personal information, credentials, production snapshots, or other sensitive data are included in the repository or package.
 
-Review [COMPATIBILITY.md](COMPATIBILITY.md) for the supported control matrix and [PRIVACY.md](PRIVACY.md) for the permission and data-handling model before release.
+Review [COMPATIBILITY.md](docs/COMPATIBILITY.md) for the supported control matrix and [PRIVACY.md](PRIVACY.md) for the permission and data-handling model before release.
 
 ## Build the release package
 
@@ -59,7 +59,7 @@ npm run package
 The archive is written to `dist/form-checkpoint-<version>.zip`. Its contents come from an explicit allowlist in `gulpfile.js`; tests, local planning files, dependencies, fixtures, and inherited FormVault runtime files are excluded. Inspect the archive before uploading:
 
 ```sh
-unzip -l dist/form-checkpoint-0.9.0.zip
+unzip -l dist/form-checkpoint-1.0.0.zip
 ```
 
-See [STORE-LISTING.md](STORE-LISTING.md) for draft listing copy and remaining dashboard assets.
+See [STORE-LISTING.md](docs/STORE-LISTING.md) for draft listing copy and remaining dashboard assets.

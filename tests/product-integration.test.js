@@ -16,7 +16,7 @@ test('manifest and package metadata identify Form Checkpoint and its repository'
   const packageJson = JSON.parse(read('package.json'));
 
   assert.equal(manifest.name, 'Form Checkpoint');
-  assert.equal(manifest.version, '0.9.0');
+  assert.equal(manifest.version, '1.0.0');
   assert.equal(manifest.action.default_title, 'Form Checkpoint');
   assert.equal(new Set(manifest.permissions).size, manifest.permissions.length);
   assert.deepEqual(manifest.permissions.sort(), [

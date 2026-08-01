@@ -6,7 +6,7 @@ This file contains draft submission copy and the remaining dashboard checklist. 
 
 Name: **Form Checkpoint**
 
-Category: **Productivity**
+Category: **Tools** (under Productivity)
 
 Single purpose:
 
@@ -29,7 +29,12 @@ Detailed description:
 > - Restore many controlled and conditional forms using native setters and browser events.
 > - Keep saved form data in local Chrome extension storage.
 >
-> Password, file, and hidden inputs are deliberately excluded. Form Checkpoint is an actively maintained, MIT-licensed fork of FormVault; it is not an official FormVault release.
+> Password, file, and hidden inputs are deliberately excluded.
+>
+> Form Checkpoint is an open-source extension released under the MIT License. View the source code, report issues, or contribute on GitHub:
+> https://github.com/rsheyd/form-checkpoint
+>
+> Form Checkpoint is an actively maintained fork of FormVault; it is not an official FormVault release.
 
 ## Privacy dashboard draft
 
@@ -54,7 +59,7 @@ Published privacy-policy URL: `https://github.com/rsheyd/form-checkpoint/blob/ma
 - [ ] Complete privacy disclosures and limited-use certification.
 - [ ] Confirm the developer account has 2-Step Verification enabled.
 - [ ] Select distribution regions and visibility.
-- [ ] Upload the ZIP created by `npm run package`. A clean-profile manual test was completed successfully on August 1, 2026.
+- [ ] Upload `dist/form-checkpoint-1.0.0.zip`. The archive passed tests, lint, and ZIP-integrity validation; a clean-profile manual test was completed successfully on August 1, 2026.
 
 ## Accuracy checks
 
