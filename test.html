@@ -1,22 +1,59 @@
-<!DOCTYPE html>
-<html>
-<body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FormVault compatibility fixture</title>
+  </head>
+  <body>
+    <h1>Non-sensitive form compatibility fixture</h1>
+    <p>Use sample values only. This fixture intentionally covers controls the legacy parser mishandles.</p>
 
-<form action="/action_page.php" id="usrform">
-  Name: <input type="text" name="usrname">
-  <input type="submit"> <br>
-  <input type="radio" name="gender" value="male"> Male<br>
-  <input type="radio" name="gender" value="female"> Female<br>
-  <input type="radio" name="gender" value="other"> Other  <br>
-  <input type="checkbox" id="test1" name="test1" value="test1">
-  <label for="test1">Test1</label> <br>
-  <input type="checkbox" id="test2" name="test2" value="test2">
-  <label for="test2">Test2</label> <br>
-  <textarea name="sup"> </textarea>
-</form>
-<br>
+    <form id="primary-form">
+      <label for="full-name">Full name</label>
+      <input id="full-name" name="fullName" type="text" value="Sample Person">
 
-<p>The text area above is outside the form element, but should still be a part of the form.</p>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="sample@example.test">
 
-</body>
+      <fieldset>
+        <legend>Preferred contact</legend>
+        <label><input name="contact" type="radio" value="email" checked> Email</label>
+        <label><input name="contact" type="radio" value="phone"> Phone</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Options</legend>
+        <label><input name="updates" type="checkbox" value="news" checked> News</label>
+        <label><input name="updates" type="checkbox" value="events"> Events</label>
+      </fieldset>
+
+      <label for="region">Region</label>
+      <select id="region" name="region">
+        <option value="north">North</option>
+        <option value="south" selected>South</option>
+      </select>
+
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes">Sample notes</textarea>
+
+      <fieldset>
+        <legend>Repeated names</legend>
+        <input name="householdMember" value="Alex">
+        <input name="householdMember" value="Sam">
+      </fieldset>
+
+      <label for="unnamed">Control without a name</label>
+      <input id="unnamed" value="Unnamed sample">
+
+      <label for="password">Password (must never be captured)</label>
+      <input id="password" name="password" type="password" value="not-a-real-password">
+    </form>
+
+    <label for="outside-form">Field outside the form</label>
+    <textarea id="outside-form" name="outsideForm">Outside sample</textarea>
+
+    <p id="manual-install-test">
+      To test the defining install scenario, open this page and edit its values before loading the unpacked extension. Save without refreshing this tab.
+    </p>
+  </body>
 </html>
