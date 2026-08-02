@@ -4,7 +4,7 @@
     "name": "Form Checkpoint",
     "description": "Save the current state of a filled form and restore it later, including forms filled before installation.",
 
-    "version": "1.0.0",
+    "version": "1.1.0",
 
     "icons": {
         "16": "artwork/icons/icon-16.png",

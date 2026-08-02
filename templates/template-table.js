@@ -1,4 +1,4 @@
-/* global CheckpointActions, CheckpointStorage */
+/* global CheckpointActions, CheckpointStorage, SnapshotText */
 
 function setStatus(message) {
   document.getElementById('status').textContent = message;
@@ -86,6 +86,18 @@ async function openAndRestore(record) {
   }
 }
 
+async function copyAll(record) {
+  try {
+    var text = SnapshotText.format(record.snapshot, {
+      savedAt: new Date(record.savedAt).toLocaleString()
+    });
+    await navigator.clipboard.writeText(text);
+    setStatus('Copied ' + record.snapshot.controls.length + ' fields to the clipboard.');
+  } catch (error) {
+    setStatus('Could not copy this saved form. ' + (error.message || String(error)));
+  }
+}
+
 function renderVersion(record, tableBody, group) {
   var row = tableBody.insertRow();
   row.insertCell().textContent = new Date(record.savedAt).toLocaleString();
@@ -93,6 +105,10 @@ function renderVersion(record, tableBody, group) {
   var actions = row.insertCell();
   actions.appendChild(createButton('Open & restore', 'btn-primary', function () {
     openAndRestore(record);
+  }));
+  actions.appendChild(document.createTextNode(' '));
+  actions.appendChild(createButton('Copy All', 'btn-default', function () {
+    copyAll(record);
   }));
   actions.appendChild(document.createTextNode(' '));
   actions.appendChild(createButton('Delete', 'btn-danger', async function () {

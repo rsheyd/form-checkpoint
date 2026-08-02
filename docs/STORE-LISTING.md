@@ -25,6 +25,7 @@ Detailed description:
 > - Save forms that were already filled before the extension was installed.
 > - Keep multiple timestamped versions for the same form page.
 > - Restore the latest version from the toolbar or choose an older version from Saved Forms.
+> - Copy any saved version as readable plain text without reopening the original page.
 > - Preserve repeated fields, checkboxes, radio buttons, textareas, and selected options.
 > - Restore many controlled and conditional forms using native setters and browser events.
 > - Keep saved form data in local Chrome extension storage.
@@ -59,7 +60,7 @@ Published privacy-policy URL: `https://github.com/rsheyd/form-checkpoint/blob/ma
 - [ ] Complete privacy disclosures and limited-use certification.
 - [ ] Confirm the developer account has 2-Step Verification enabled.
 - [ ] Select distribution regions and visibility.
-- [ ] Upload `dist/form-checkpoint-1.0.0.zip`. The archive passed tests, lint, and ZIP-integrity validation; a clean-profile manual test was completed successfully on August 1, 2026.
+- [ ] Upload `dist/form-checkpoint-1.1.0.zip`. The archive passes tests, lint, and ZIP-integrity validation. Complete a clean-profile manual test of Copy All before uploading this update; the original 1.0.0 workflow was manually verified on August 1, 2026.
 
 ## Accuracy checks
 

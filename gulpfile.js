@@ -6,6 +6,7 @@ var JS = [
   'background.js',
   'content_scripts/form-snapshot.js',
   'content_scripts/checkpoint-storage.js',
+  'content_scripts/snapshot-text.js',
   'templates/template-table.js',
   'popup/checkpoint-actions.js',
   'popup/popup.js'
@@ -20,6 +21,7 @@ var RELEASE_FILES = [
   'background.js',
   'content_scripts/checkpoint-storage.js',
   'content_scripts/form-snapshot.js',
+  'content_scripts/snapshot-text.js',
   'css/bootstrap.min.css',
   'js/jquery.min.js',
   'manifest.json',

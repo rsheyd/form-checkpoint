@@ -105,7 +105,7 @@ Do not propose these upstream unless the maintainer specifically requests them:
 - Multiple timestamped checkpoint versions and replacement prompts.
 - Form Checkpoint schema migrations or legacy-template separation UI.
 - Chrome Web Store listing, privacy-policy text, competitive positioning, or launch plans.
-- Continuous autosave, encryption locks, retention policies, and other unbuilt roadmap ideas.
+- Continuous autosave, encryption locks, retention policies, and other Form Checkpoint product ideas outside the current roadmap.
 
 ## Stop conditions
 

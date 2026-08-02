@@ -16,7 +16,7 @@ test('manifest and package metadata identify Form Checkpoint and its repository'
   const packageJson = JSON.parse(read('package.json'));
 
   assert.equal(manifest.name, 'Form Checkpoint');
-  assert.equal(manifest.version, '1.0.0');
+  assert.equal(manifest.version, '1.1.0');
   assert.equal(manifest.action.default_title, 'Form Checkpoint');
   assert.equal(new Set(manifest.permissions).size, manifest.permissions.length);
   assert.deepEqual(manifest.permissions.sort(), [
@@ -58,9 +58,13 @@ test('management page uses current checkpoint APIs and separates legacy records'
 
   assert.match(managerHtml, /id="checkpoint-groups"/);
   assert.match(managerHtml, /Legacy FormVault templates/);
+  assert.match(managerHtml, /snapshot-text\.js/);
   assert.match(managerSource, /CheckpointStorage\.list/);
   assert.match(managerSource, /CheckpointStorage\.removeVersion/);
   assert.match(managerSource, /CheckpointActions\.restoreTab/);
+  assert.match(managerSource, /SnapshotText\.format/);
+  assert.match(managerSource, /navigator\.clipboard\.writeText/);
+  assert.match(managerSource, /'Copy All'/);
   assert.match(managerSource, /chrome\.permissions\.request/);
   assert.match(managerSource, /chrome\.storage\.sync/);
 });
@@ -81,6 +85,7 @@ test('release packaging uses an explicit runtime allowlist', () => {
   assert.match(gulpSource, /var RELEASE_FILES = \[/);
   assert.match(gulpSource, /content_scripts\/form-snapshot\.js/);
   assert.match(gulpSource, /content_scripts\/checkpoint-storage\.js/);
+  assert.match(gulpSource, /content_scripts\/snapshot-text\.js/);
   assert.doesNotMatch(gulpSource, /RELEASE_FILES[\s\S]*content_scripts\/form-parser\.js/);
   assert.equal(packageJson.scripts.package, 'npm test && npm run lint && gulp zip');
   assert.deepEqual(packageJson.dependencies, {});

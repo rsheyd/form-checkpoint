@@ -59,7 +59,7 @@ npm run package
 The archive is written to `dist/form-checkpoint-<version>.zip`. Its contents come from an explicit allowlist in `gulpfile.js`; tests, local planning files, dependencies, fixtures, and inherited FormVault runtime files are excluded. Inspect the archive before uploading:
 
 ```sh
-unzip -l dist/form-checkpoint-1.0.0.zip
+unzip -l dist/form-checkpoint-1.1.0.zip
 ```
 
 See [STORE-LISTING.md](docs/STORE-LISTING.md) for draft listing copy and remaining dashboard assets.

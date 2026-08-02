@@ -19,6 +19,7 @@ Form Checkpoint explicitly captures the current state of a page when **Save Form
 | Query-string or URL-fragment changes | Manually verified; origin and pathname define page identity |
 | Multiple saved versions | Supported with timestamps, latest-version restore, and explicit replacement |
 | Restoring an older version from Saved Forms | Requests optional access only to the selected site |
+| Copying a complete saved version | Copy All produces ordered, labeled plain text without accessing the original site |
 
 Other ordinary non-sensitive HTML input types use the same native value path, but need broader manual Chrome coverage before they should be described individually as verified.
 

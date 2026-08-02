@@ -9,7 +9,7 @@
   <body>
     <main class="container">
       <h1>Saved Forms</h1>
-      <p>Each form page can have multiple saved versions. Restore or delete any version below.</p>
+      <p>Each form page can have multiple saved versions. Restore, copy, or delete any version below.</p>
       <p id="status" role="status" aria-live="polite"></p>
       <div id="checkpoint-groups"></div>
 
@@ -23,6 +23,7 @@
       </section>
     </main>
     <script src="../content_scripts/checkpoint-storage.js"></script>
+    <script src="../content_scripts/snapshot-text.js"></script>
     <script src="../popup/checkpoint-actions.js"></script>
     <script src="template-table.js"></script>
   </body>
